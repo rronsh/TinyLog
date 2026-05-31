@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "components/macros.html" import page_header %}
+{% block content %}
+<div class="min-h-screen">
+
+  {{ page_header(baby, "Feedings") }}
+
+  <!-- Feed list -->
+  <div class="p-4 pb-28" id="feeding-section"
+       hx-get="/babies/{{ baby.id }}/feedings/list"
+       hx-trigger="feedingLogged from:body"
+       hx-swap="innerHTML">
+    {% include "partials/feeding_list.html" %}
+  </div>
+
+  <!-- FAB -->
+  <div class="fixed bottom-20 right-4 z-30">
+    <button x-data
+            @click="$dispatch('open-sheet', {url: '/babies/{{ baby.id }}/feedings/form'})"
+            class="btn btn-accent rounded-2xl w-14 h-14 shadow-lg">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+      </svg>
+    </button>
+  </div>
+
+</div>
+{% endblock %}

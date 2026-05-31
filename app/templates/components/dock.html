@@ -1,0 +1,48 @@
+<nav class="dock z-40" style="padding-bottom: env(safe-area-inset-bottom)">
+
+  <a href="/" class="{% if not current_section %}dock-active{% endif %}">
+    <svg class="size-[1.2em]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+    </svg>
+    <span class="dock-label">Home</span>
+  </a>
+
+  <a href="/babies/{{ current_baby.id }}" class="{% if current_section == 'dashboard' %}dock-active{% endif %}">
+    <svg class="size-[1.2em]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+    </svg>
+    <span class="dock-label">{{ current_baby.name }}</span>
+  </a>
+
+  <a href="/babies/{{ current_baby.id }}/feedings"
+     class="{% if current_section == 'feedings' %}dock-active{% endif %}"
+     x-data
+     @click.prevent="
+       if ($store.feedingTimer.running && $store.feedingTimer.babyId === '{{ current_baby.id }}') {
+         $dispatch('open-sheet', {url: '/babies/{{ current_baby.id }}/feedings/form'});
+       } else {
+         window.location.href = $el.href;
+       }
+     ">
+    <svg class="size-[1.2em]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+    </svg>
+    <div hx-get="/babies/{{ current_baby.id }}/feedings/active-badge"
+         hx-trigger="load, feedingTimerStarted from:body, feedingTimerStopped from:body"
+         hx-swap="innerHTML">
+      <span class="dock-label">Feed</span>
+    </div>
+  </a>
+
+  <a href="/babies/{{ current_baby.id }}/sleeps" class="{% if current_section == 'sleeps' %}dock-active{% endif %}">
+    <svg class="size-[1.2em]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+    </svg>
+    <span class="dock-label">Sleep</span>
+  </a>
+
+</nav>

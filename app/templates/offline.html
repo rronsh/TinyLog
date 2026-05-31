@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cupcake">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TinyLog · Offline</title>
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body class="bg-base-200 min-h-screen flex items-center justify-center p-6">
+  <div class="text-center">
+    <div class="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-4">
+      <svg class="w-8 h-8 text-primary/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 3l18 18M10.58 10.58a2 2 0 002.83 2.83M7.243 7.243A6 6 0 0112 6c3.314 0 6 2.686 6 6a6 6 0 01-.246 1.69M3.515 3.515A12 12 0 002 12c0 6.627 5.373 12 12 12a12 12 0 008.485-3.515"/>
+      </svg>
+    </div>
+    <h1 class="text-xl font-bold text-base-content mb-2">You're offline</h1>
+    <p class="text-sm text-base-content/65 mb-6">Check your connection and try again.</p>
+    <button onclick="location.reload()" class="btn btn-primary rounded-xl px-6">
+      Retry
+    </button>
+  </div>
+</body>
+</html>

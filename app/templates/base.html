@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dim">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+{#  <meta name="theme-color" content="#f43f5e">#}
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TinyLog">
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+  <link rel="stylesheet" href="/static/css/app.css">
+  <title>TinyLog{% if title %} · {{ title }}{% endif %}</title>
+</head>
+<body class="bg-base-200 min-h-screen font-sans antialiased">
+
+  <!-- Main content -->
+  <div id="main" class="{% if current_baby %}pb-20{% else %}pb-6{% endif %}">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Bottom dock (only when a baby is selected) -->
+  {% if current_baby %}
+  {% include "components/dock.html" %}
+  {% endif %}
+
+  <!-- Bottom sheet -->
+  {% include "components/sheet.html" %}
+
+  <!-- Confirm modal -->
+  {% include "components/confirm_modal.html" %}
+
+  <script src="/static/js/htmx.min.js"
+          onerror="this.onerror=null;this.src='https://unpkg.com/htmx.org@2/dist/htmx.min.js'"></script>
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('feedingTimer', {
+        running: false,
+        babyId: null,
+        _tick: 0,
+        _interval: null,
+
+        init() {
+          window.addEventListener('feedingTimerStopped', () => {
+            this.running = false;
+            this.babyId = null;
+            this.stopTick();
+          });
+        },
+
+        startTick() {
+          if (this._interval) return;
+          this._interval = setInterval(() => this._tick++, 1000);
+        },
+
+        stopTick() {
+          clearInterval(this._interval);
+          this._interval = null;
+        },
+      });
+    });
+  </script>
+  <script defer src="/static/js/alpine.min.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

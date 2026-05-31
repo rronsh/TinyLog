@@ -1,0 +1,30 @@
+{% if babies %}
+<div class="space-y-3 pb-28">
+  {% for baby in babies %}
+  <a href="/babies/{{ baby.id }}"
+     class="card card-compact bg-base-100 shadow-sm rounded-2xl active:scale-98 transition-transform block">
+    <div class="card-body flex-row items-center gap-4">
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+           style="background-color: {{ baby.avatar_color }}">
+        {{ baby.name[0].upper() }}
+      </div>
+      <div class="flex-1 min-w-0">
+        <h2 class="font-semibold text-base-content text-base">{{ baby.name }}</h2>
+        <p class="text-sm text-base-content/60">Born {{ baby.birth_date | date_fmt }}</p>
+      </div>
+      <svg class="w-5 h-5 text-base-content/40 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+{% from "components/macros.html" import empty_state %}
+{% call empty_state("Add your first baby to get started", bg_class="bg-primary/10", heading="No babies yet") %}
+  <svg class="w-10 h-10 text-primary/30" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round"
+          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+  </svg>
+{% endcall %}
+{% endif %}

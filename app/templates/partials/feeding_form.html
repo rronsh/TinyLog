@@ -1,0 +1,100 @@
+{% from "components/macros.html" import sheet_header %}
+<div class="px-5 pt-4 pb-6">
+
+{% if active %}
+
+  {{ sheet_header("Feeding in Progress") }}
+
+  {% include "partials/feeding_timer_section.html" %}
+
+  <div class="form-control mb-5">
+    <label class="label">
+      <span class="label-text font-medium">Notes <span class="text-base-content/60 font-normal">(optional)</span></span>
+    </label>
+    <input type="text" name="notes" placeholder="Any notes..."
+           class="input input-bordered w-full rounded-xl">
+  </div>
+
+  <button type="button"
+          hx-post="/babies/{{ baby.id }}/feedings/active/stop"
+          hx-include="[name=notes]"
+          hx-swap="none"
+          class="btn btn-primary w-full rounded-2xl text-base">
+    Stop &amp; Log
+  </button>
+
+{% else %}
+
+  {{ sheet_header("Log Feeding") }}
+
+  <form hx-post="/babies/{{ baby.id }}/feedings"
+        hx-swap="none"
+        x-data="{ type: 'breast' }">
+
+    <div class="form-control mb-5">
+      <label class="label">
+        <span class="label-text font-medium">Type</span>
+      </label>
+      <div class="join w-full">
+        <input class="join-item btn flex-1" type="radio" name="feeding_type" value="breast" aria-label="Breast" checked @change="type = $event.target.value">
+        <input class="join-item btn flex-1" type="radio" name="feeding_type" value="bottle" aria-label="Bottle" @change="type = $event.target.value">
+      </div>
+    </div>
+
+    <div class="form-control mb-4" x-show="type === 'breast'">
+      <label class="label">
+        <span class="label-text font-medium">Side</span>
+      </label>
+      <div class="join w-full">
+        {% for side in ["left", "right", "both"] %}
+        <input class="join-item btn flex-1" type="radio" name="side" value="{{ side }}"
+               {% if loop.first %}checked{% endif %} aria-label="{{ side | capitalize }}">
+        {% endfor %}
+      </div>
+    </div>
+
+    <div id="feeding-timer-section" x-show="type === 'breast'">
+      <div class="form-control mb-4">
+        <label class="label">
+          <span class="label-text font-medium">Duration (minutes)</span>
+        </label>
+        <input type="number" name="duration_minutes" min="1" max="120" placeholder="e.g. 15"
+               class="input input-bordered w-full rounded-xl">
+      </div>
+
+      <button type="button"
+              class="btn btn-outline w-full rounded-xl mb-4"
+              hx-post="/babies/{{ baby.id }}/feedings/start"
+              hx-include="[name=side]"
+              hx-target="#sheet-content"
+              hx-swap="innerHTML">
+        Start Timer
+      </button>
+    </div>
+
+    <div class="form-control mb-4" x-show="type === 'bottle'" style="display:none">
+      <label class="label">
+        <span class="label-text font-medium">Amount (ml)</span>
+      </label>
+      <input type="number" name="amount_ml" min="1" max="1000" step="1" placeholder="e.g. 120"
+             class="input input-bordered w-full rounded-xl">
+    </div>
+
+    <div class="form-control mb-5">
+      <label class="label">
+        <span class="label-text font-medium">Notes <span class="text-base-content/60 font-normal">(optional)</span></span>
+      </label>
+      <input type="text" name="notes" placeholder="Any notes..."
+             class="input input-bordered w-full rounded-xl">
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary w-full rounded-2xl text-base">
+      Log Feeding
+    </button>
+
+  </form>
+
+{% endif %}
+
+</div>

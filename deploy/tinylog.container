@@ -1,0 +1,15 @@
+[Unit]
+Description=TinyLog baby tracker
+After=local-fs.target
+
+[Container]
+Image=ghcr.io/rronsh/tinylog:latest
+PublishPort=8000:8000
+Volume=/mnt/data/app_data/tinylog:/app/data
+
+[Service]
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=default.target

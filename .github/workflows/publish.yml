@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to ghcr.io
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push
+        run: |
+          docker build . --tag ghcr.io/rronsh/tinylog:latest --tag ghcr.io/rronsh/tinylog:sha-${GITHUB_SHA::7}
+          docker push ghcr.io/rronsh/tinylog:latest
+          docker push ghcr.io/rronsh/tinylog:sha-${GITHUB_SHA::7}

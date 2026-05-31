@@ -1,0 +1,29 @@
+{% macro sheet_header(title) %}
+<div class="w-10 h-1 bg-base-300 rounded-full mx-auto mb-6"></div>
+<h2 class="text-xl font-bold text-base-content mb-5">{{ title }}</h2>
+{% endmacro %}
+
+{% macro page_header(baby, title) %}
+<div class="bg-base-100 px-5 pt-12 pb-4 border-b border-base-300">
+  <div class="flex items-center gap-3">
+    <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-sm"
+         style="background-color: {{ baby.avatar_color }}">
+      {{ baby.name[0].upper() }}
+    </div>
+    <div>
+      <h1 class="text-xl font-bold text-base-content">{{ title }}</h1>
+      <p class="text-sm text-base-content/60">{{ baby.name }}</p>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro empty_state(message, bg_class="bg-base-content/10", heading=None) %}
+<div class="text-center py-16">
+  <div class="w-16 h-16 {{ bg_class }} rounded-3xl flex items-center justify-center mx-auto mb-3">
+    {{ caller() }}
+  </div>
+  {% if heading %}<h2 class="text-lg font-semibold text-base-content/70 mb-1">{{ heading }}</h2>{% endif %}
+  <p class="text-base-content/60 text-sm">{{ message }}</p>
+</div>
+{% endmacro %}

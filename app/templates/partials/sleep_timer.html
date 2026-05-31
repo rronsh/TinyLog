@@ -1,0 +1,41 @@
+<div class="bg-secondary/10 rounded-2xl p-4"
+     x-data="{
+       elapsed: 0,
+       init() {
+         const start = new Date({{ sleep.start_time }} * 1000);
+         const tick = () => { this.elapsed = Math.floor((Date.now() - start.getTime()) / 1000); };
+         tick();
+         setInterval(tick, 1000);
+       },
+       get formatted() {
+         const h = Math.floor(this.elapsed / 3600);
+         const m = Math.floor((this.elapsed % 3600) / 60);
+         const s = this.elapsed % 60;
+         return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+       }
+     }">
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-2">
+      <span class="status status-secondary animate-pulse"></span>
+      <span class="text-sm font-semibold text-secondary">Sleeping now</span>
+    </div>
+    <span class="text-xs text-base-content/60">started {{ sleep.start_time | relative }}</span>
+  </div>
+
+  <div class="text-3xl font-bold text-secondary tracking-wide mb-4 text-center"
+       x-text="formatted">
+    00:00:00
+  </div>
+
+  <form hx-post="/babies/{{ sleep.baby_id }}/sleeps/{{ sleep.id }}/end"
+        hx-target="#sleep-section"
+        hx-swap="innerHTML">
+    <button type="submit"
+            class="btn btn-secondary w-full rounded-xl">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 7.5A2.25 2.25 0 017.5 5.25h9a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25v-9z"/>
+      </svg>
+      Stop Sleep
+    </button>
+  </form>
+</div>

@@ -1,0 +1,53 @@
+{% from "components/macros.html" import sheet_header %}
+<div class="px-5 pt-4 pb-6">
+  {{ sheet_header("Add Baby") }}
+
+  <form hx-post="/babies"
+        hx-target="#baby-list"
+        hx-swap="innerHTML">
+
+    <!-- Name -->
+    <div class="form-control mb-4">
+      <label class="label">
+        <span class="label-text font-medium">Name</span>
+      </label>
+      <input type="text" name="name" required placeholder="Baby's name"
+             autocomplete="off"
+             class="input input-bordered w-full rounded-xl">
+    </div>
+
+    <!-- Birth date -->
+    <div class="form-control mb-4">
+      <label class="label">
+        <span class="label-text font-medium">Date of Birth</span>
+      </label>
+      <input type="date" name="birth_date" required
+             class="input input-bordered w-full rounded-xl">
+    </div>
+
+    <!-- Color -->
+    <div class="mb-6">
+      <label class="label">
+        <span class="label-text font-medium">Color</span>
+      </label>
+      <div class="flex gap-3 flex-wrap">
+        {% set colors = ["#FF9AA2","#FFB7B2","#FFDAC1","#E2F0CB","#B5EAD7","#C7CEEA","#F8B4D9","#FDE68A"] %}
+        {% for color in colors %}
+        <label class="cursor-pointer">
+          <input type="radio" name="avatar_color" value="{{ color }}"
+                 {% if loop.first %}checked{% endif %}
+                 class="sr-only peer">
+          <div class="w-9 h-9 rounded-xl transition-transform peer-checked:scale-110 peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-base-content/30"
+               style="background-color: {{ color }}"></div>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary w-full rounded-2xl text-base">
+      Add Baby
+    </button>
+
+  </form>
+</div>

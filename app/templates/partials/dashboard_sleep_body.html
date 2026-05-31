@@ -1,0 +1,34 @@
+{% if sleep %}
+<div class="px-4 py-4 border-b border-base-200">
+  {% include "partials/sleep_timer.html" %}
+</div>
+{% elif recent_sleeps %}
+<div class="divide-y divide-base-200">
+  {% for s in recent_sleeps[:3] %}
+  <div class="px-4 py-3 flex items-center justify-between">
+    <div>
+      <span class="text-sm font-medium text-base-content">{{ s.duration_seconds | duration }}</span>
+      <p class="text-xs text-base-content/60">{{ s.start_time | relative }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="px-4 py-6 text-sm text-base-content/60 text-center">No sleeps logged yet</p>
+{% endif %}
+
+{% if not sleep %}
+<div class="p-3 border-t border-base-200">
+  <form hx-post="/babies/{{ baby.id }}/sleeps/start"
+        hx-target="#sleep-section"
+        hx-swap="innerHTML">
+    <button type="submit"
+            class="btn btn-ghost w-full rounded-xl btn-sm py-3 h-auto">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+      </svg>
+      Start Sleep
+    </button>
+  </form>
+</div>
+{% endif %}

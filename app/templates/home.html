@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="min-h-screen bg-gradient-to-b from-base-300 to-base-200">
+
+  <!-- Header -->
+  <div class="px-5 pt-12 pb-6">
+    <div class="flex items-center gap-3 mb-1">
+      <div class="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center shadow-sm">
+        <svg class="w-6 h-6 text-primary-content" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold text-base-content leading-tight">TinyLog</h1>
+        <p class="text-sm text-base-content/65">Baby tracker</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Baby list -->
+  <div class="px-4">
+    <div id="baby-list">
+      {% include "partials/baby_list.html" %}
+    </div>
+  </div>
+
+  <!-- Add baby button -->
+  <div class="fixed bottom-0 inset-x-0 p-4 bg-gradient-to-t from-base-200 to-transparent">
+    <button
+      x-data
+      @click="$dispatch('open-sheet', {url: '/babies/new-form'})"
+      class="btn btn-primary w-full rounded-2xl py-4 text-base shadow-lg">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+      </svg>
+      Add Baby
+    </button>
+  </div>
+
+</div>
+{% endblock %}

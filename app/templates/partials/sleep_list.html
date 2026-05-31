@@ -1,0 +1,50 @@
+{% if sleep %}
+<div class="mb-4" id="active-sleep-card">
+  {% include "partials/sleep_timer.html" %}
+</div>
+{% endif %}
+
+{% set completed = sleeps | selectattr('end_time') | list %}
+
+{% if completed %}
+<div class="space-y-2">
+  {% for s in completed %}
+  <div class="card card-compact bg-base-100 shadow-sm rounded-2xl"
+       id="sleep-{{ s.id }}">
+    <div class="card-body flex-row items-center gap-3">
+      <div class="flex items-center gap-3 min-w-0 flex-1">
+        <div class="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-base-content">{{ s.duration_seconds | duration }}</p>
+          <p class="text-xs text-base-content/60">{{ s.start_time | relative }}</p>
+        </div>
+      </div>
+      <button x-data
+              @click="$dispatch('confirm-delete', {
+                message: 'Delete this sleep?',
+                url: '/babies/{{ baby.id }}/sleeps/{{ s.id }}',
+                target: '#sleep-{{ s.id }}'
+              })"
+              class="btn btn-ghost btn-sm w-8 h-8 p-0 text-base-content/40 active:text-error">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% elif not sleep %}
+{% from "components/macros.html" import empty_state %}
+{% call empty_state("No sleeps logged yet", bg_class="bg-indigo-100") %}
+  <svg class="w-8 h-8 text-indigo-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round"
+          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+  </svg>
+{% endcall %}
+{% endif %}

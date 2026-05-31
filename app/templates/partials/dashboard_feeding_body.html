@@ -1,0 +1,39 @@
+{% if recent_feedings %}
+<div class="divide-y divide-base-200">
+  {% for f in recent_feedings[:3] %}
+  <div class="px-4 py-3 flex items-center justify-between">
+    <div>
+      <span class="text-sm font-medium text-base-content capitalize">{{ f.feeding_type }}
+        {% if f.side %}<span class="text-base-content/60">· {{ f.side }}</span>{% endif %}
+      </span>
+      <p class="text-xs text-base-content/60">{{ f.timestamp | relative }}</p>
+    </div>
+    <div class="text-right">
+      {% if f.amount_ml %}<span class="text-sm text-base-content/75">{{ f.amount_ml|int }} ml</span>{% endif %}
+      {% if f.left_duration_seconds or f.right_duration_seconds %}
+        <span class="text-sm text-base-content/75">
+          {% if f.left_duration_seconds %}L: {{ f.left_duration_seconds | duration }}{% endif %}
+          {% if f.left_duration_seconds and f.right_duration_seconds %} · {% endif %}
+          {% if f.right_duration_seconds %}R: {{ f.right_duration_seconds | duration }}{% endif %}
+        </span>
+      {% elif f.duration_seconds %}
+        <span class="text-sm text-base-content/75">{{ f.duration_seconds | duration }}</span>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="px-4 py-6 text-sm text-base-content/60 text-center">No feedings logged yet</p>
+{% endif %}
+
+<div class="p-3 border-t border-base-200">
+  <button x-data
+          @click="$dispatch('open-sheet', {url: '/babies/{{ baby.id }}/feedings/form'})"
+          class="btn btn-ghost w-full rounded-xl btn-sm py-3 h-auto">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+    </svg>
+    Log Feeding
+  </button>
+</div>

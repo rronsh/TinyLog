@@ -1,0 +1,20 @@
+{% if active %}
+<span class="dock-label flex items-center gap-1 text-accent font-semibold"
+      x-data="{
+        lastSwitchAt: {{ active.last_switch_at * 1000 }},
+        leftAcc: {{ active.left_accumulated }},
+        rightAcc: {{ active.right_accumulated }},
+        currentSide: '{{ active.current_side }}',
+        get currentElapsed() { $store.feedingTimer._tick; return Math.floor((Date.now() - this.lastSwitchAt) / 1000); },
+        get leftTotal() { return this.leftAcc + (this.currentSide === 'left' ? this.currentElapsed : 0); },
+        get rightTotal() { return this.rightAcc + (this.currentSide === 'right' ? this.currentElapsed : 0); },
+        get totalElapsed() { return this.leftTotal + this.rightTotal; },
+        fmt(s) { const m = Math.floor(s / 60); return String(m).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
+      }"
+      x-init="$store.feedingTimer.running = true; $store.feedingTimer.babyId = '{{ baby_id }}'; $store.feedingTimer.startTick()">
+  <span class="inline-block w-2 h-2 rounded-full bg-accent animate-pulse flex-shrink-0"></span>
+  <span x-text="fmt(totalElapsed)" class="tabular-nums">00:00</span>
+</span>
+{% else %}
+<span class="dock-label">Feed</span>
+{% endif %}

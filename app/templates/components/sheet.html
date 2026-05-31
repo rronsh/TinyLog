@@ -1,0 +1,27 @@
+<div x-data="{
+    open: false,
+    load(url) {
+      this.open = true;
+      htmx.ajax('GET', url, {target: '#sheet-content', swap: 'innerHTML'});
+    },
+    close() { this.open = false; }
+  }"
+  x-init="
+    $watch('open', v => document.body.style.overflow = v ? 'hidden' : '');
+    window.addEventListener('closeSheet', () => { open = false; });
+    window.addEventListener('htmx:afterSwap', e => {
+      if (['sleep-section', 'baby-list'].includes(e.detail?.target?.id)) open = false;
+    });
+  "
+  @open-sheet.window="load($event.detail.url)">
+  <div x-show="open"
+       @click="close()"
+       class="fixed inset-0 bg-black/40 z-50"
+       style="display:none">
+  </div>
+  <div :class="open ? 'translate-y-0' : 'translate-y-full'"
+       class="fixed bottom-0 inset-x-0 bg-base-100 rounded-t-3xl z-50 transition-transform duration-300 ease-out max-h-[90vh] overflow-y-auto"
+       style="padding-bottom: env(safe-area-inset-bottom)">
+    <div id="sheet-content"></div>
+  </div>
+</div>
